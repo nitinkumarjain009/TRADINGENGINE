@@ -1,0 +1,98 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.20.0/plotly.min.js"></script>
+    <style>
+        .recommendation-strong-buy {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+        }
+        .recommendation-buy {
+            background-color: #e8f4f8;
+            border-left: 5px solid #17a2b8;
+        }
+        .recommendation-hold {
+            background-color: #f8f9fa;
+            border-left: 5px solid #6c757d;
+        }
+        .recommendation-sell {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+        }
+        .recommendation-strong-sell {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+        }
+        .stock-card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .stock-card:hover {
+            transform: translateY(-5px);
+        }
+        .chart-container {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Stock Trading Bot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Recommendations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://t.me/Stockniftybot" target="_blank">Telegram Channel</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Stock Trading Recommendations</h2>
+                        <p class="text-muted">
+                            Last updated: {{ last_update.strftime('%Y-%m-%d %H:%M:%S') if last_update else 'Never' }}
+                        </p>
+                        <p>
+                            This tool analyzes Nifty 50 stocks using technical indicators to generate trading recommendations.
+                            Recommendations are based on SMA crossovers, MACD, RSI, Bollinger Bands, and ADX.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for rec in recommendations %}
+                <div class="col-md-6">
+                    <div class="card stock-card recommendation-{{ rec.recommendation.lower().replace(' ', '-') }}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">{{ rec.company_name }} ({{ rec.symbol }})</h5>
+                            <span class="badge {% if rec.recommendation == 'Strong Buy' %}bg-success{% elif rec.recommendation == 'Buy' %}bg-info{% elif rec.recommendation == 'Hold' %}bg-secondary{% elif rec.recommendation == 'Sell' %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ rec.recommendation }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Current Price:</strong> ₹{{ rec.current_price }}</p>
+                                    <p><strong>Target Price:</strong> ₹{{ rec.target_price }}</p>
+                                </div>
+                                <div class="col-md-6">
