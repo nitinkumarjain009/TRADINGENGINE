@@ -1,0 +1,8 @@
+# requirements.txt
+Flask
+pandas
+numpy==1.24.3
+requests==2.31.0
+yfinance
+plotly==5.17.0
+gunicorn==21.2.0
