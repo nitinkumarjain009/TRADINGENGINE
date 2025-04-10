@@ -52,6 +52,16 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/">Recommendations</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="backtestDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Backtest
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="backtestDropdown">
+                            {% for rec in recommendations %}
+                                <li><a class="dropdown-item" href="/backtest/{{ rec.symbol }}">{{ rec.company_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://t.me/Stockniftybot" target="_blank">Telegram Channel</a>
                     </li>
